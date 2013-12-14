@@ -6,10 +6,10 @@ A jQuery plugin that allows binding event handlers such that they are executed f
 Usage
 -------
 
-$.bindFirst(
-    event,              String representing the event name
-    eventListener       Function to be called upon event trigger
-)
+    $.bindFirst(
+        event,              String representing the event name
+        eventListener       Function to be called upon event trigger
+    )
 
 Binds the specified event and event listener to the specified element in such a way that it will be the first
 event listener executed by jQuery.
