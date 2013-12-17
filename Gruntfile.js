@@ -47,14 +47,17 @@ module.exports = function(grunt) {
                 jshintrc: ".jshintrc"
             },
             test: {
-                files: "src/*.js"
+                src: "src/*.js"
             }
         },
         mocha: {
             test: {
-                files: "test/index.html"
-            },
-            reporter: "spec"
+            	options: {
+            		log: true,
+            		run: false
+            	},
+                src: ["test/index.html"]
+            }
         },
         uglify: {
 			dist: {
