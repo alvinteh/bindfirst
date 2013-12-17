@@ -3,38 +3,85 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON("package.json"),
-		concat: {
-            dist: {
-                files: {
-                	"dist/bindfirst.js": ["src/*.js"],
+        bower: {
+            test: {
+                options: {
+                    cleanup: true,
+                    layout: "byComponent",
+                    targetDir: "test/dependencies"
                 }
             }
         },
-        jshint: {
-            files: [
-            	"src/*.js"
-        	],
-            options: {
-                jshintrc: ".jshintrc"
+        clean: {
+            dist: {
+                src: ["dist"]
+            },
+            test: {
+                src: ["test/dependencies"]
             }
         },
+		concat: {
+            dist: {
+                files: {
+                	"dist/bindfirst.js": ["src/*.js"]
+                }
+            },
+            test: {
+                files: {
+                    "test/dependencies/bindfirst/bindfirst.js": ["src/*.js"]
+                }
+            }
+        },
+        copy: {
+            test: {
+            	expand: true,
+            	filter: "isFile",
+            	flatten: true,
+                cwd: "node_modules/grunt-mocha/node_modules/mocha/",
+                src: "**",
+                dest: "test/dependencies/mocha/"
+            }
+        },
+        jshint: {
+            options: {
+                jshintrc: ".jshintrc"
+            },
+            test: {
+                files: "src/*.js"
+            }
+        },
+        mocha: {
+            test: {
+                files: "test/index.html"
+            },
+            reporter: "spec"
+        },
         uglify: {
-			all: {
+			dist: {
             	files: {
                 	"dist/bindfirst.min.js": ["dist/bindfirst.js"]
                 },
 				options: {
                 	preserveComments: false,
-                    banner: "/*! bindfirst <%= pkg.version %> | 2013 Alvin Teh | MIT-licensed */",
+                    banner: "/*! bindfirst <%= pkg.version %> | 2013 Alvin Teh | MIT-licensed */"
             	}
             }
         },
         watch: {
-            files: ["src/*.js"],
+            dev: {
+                files: ["src/*.js"],
+                tasks: [
+                    "jshint",
+                    "mocha:all"
+                ]
+            }
         },
 	});
 
-	require('load-grunt-tasks')(grunt);
+	require("load-grunt-tasks")(grunt);
 
-	grunt.registerTask("default", ["jshint", "concat", "uglify"]);
-}
+	grunt.registerTask("default", ["clean:dist", "concat:dist", "uglify:dist"]);
+    grunt.registerTask("monitor", ["watch:dev"]);
+    grunt.registerTask("test", ["jshint:test", "bower:test", "copy:test", "concat:test", "mocha:test"]);
+
+};

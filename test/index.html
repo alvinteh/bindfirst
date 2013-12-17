@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta>
+        <title>Test</title>
+        <link rel="stylesheet" type="text/css" href="dependencies/mocha/mocha.css" />
+    </head>
+    <body>
+        <div id="mocha"></div>
+        
+ 		<script src="dependencies/requirejs/require.js"></script>
+        <script src="dependencies/mocha/mocha.js"></script>
+		<script>
+        require.config({
+        	"urlArgs": (new Date()).getTime().toString().substring(8),
+            "baseUrl": "dependencies",
+            "paths": {
+            	"chai": "../dependencies/chai/chai",
+                "jquery": "../dependencies/jquery/jquery",
+                "common": "../common",
+                "bindfirst": "../dependencies/bindfirst/bindfirst"
+            },
+            use: {
+            	mocha: {
+            		attach: "mocha"
+        		}
+            }
+        });
+
+		mocha.setup("bdd");
+
+		require([
+      		"../tests/main"
+    	], function() {
+    		if (window.mochaPhantomJS) {
+				mochaPhantomJS.run();
+			}
+			else {
+				mocha.run();
+			}
+    	});
+        </script>
+    </body>
+</html>
