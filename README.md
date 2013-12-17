@@ -1,4 +1,4 @@
-bindfirst 1.01
+bindfirst 1.02
 =========
 
 A jQuery plugin that allows binding event handlers such that they are executed first.
